@@ -1,7 +1,8 @@
+using Application.Personas;
 using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,44 +12,96 @@ namespace API.Controllers
     [ApiController]
     public class PersonasController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IMediator _mediator;
 
-        public PersonasController(DataContext context)
+        public PersonasController(IMediator mediator)
         {
-            _context = context;
+            _mediator = mediator;
         }
-        // GET api/personas
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Persona>>> Get()
+        public async Task<ActionResult<List<Persona>>> List()
         {
-            var personas = await  _context.Personas.ToListAsync();
-            return Ok(personas);
+            return await _mediator.Send(new List.Query());
         }
 
-        // GET api/personas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Persona>> Get(int id)
+        public async Task<ActionResult<Persona>> Details(Guid id)
         {
-            var persona = await _context.Personas.FindAsync(id);
-            return Ok(persona);
+            return await _mediator.Send(new Details.Query {Id = id});
         }
 
-        // POST api/personas
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<Unit>> Create(Create.Command command)
         {
+            return await _mediator.Send(command);
         }
 
-        // PUT api/personas/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult<Unit>> Update(Guid id, Edit.Command command)
         {
+            command.Id = id;
+            return await _mediator.Send(command);
         }
 
-        // DELETE api/personas/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult<Unit>> Delete(Guid id)
         {
+            return await _mediator.Send(new Delete.Command {Id = id});
         }
+        //public class PersonasController : ControllerBase
+    //{
+    //    //private readonly IMediator _mediator;
+    //    private readonly DataContext _context;
+
+    //    public PersonasController(DataContext context)
+    //    {
+    //        _context = context;
+    //    }
+
+    //    //public PersonasController(IMediator mediator)
+    //    //{
+    //    //    _mediator = mediator;
+    //    //}
+
+    //    //[HttpGet]
+    //    //public async Task<ActionResult<List<Persona>>> List()
+    //    //{
+    //    //    return await _mediator.Send(new List.Query());
+    //    //}
+
+    //    //GET api/personas
+    //   [HttpGet]
+    //    public async Task<ActionResult<IEnumerable<Persona>>> Get()
+    //    {
+    //        var personas = await _context.Personas.ToListAsync();
+    //        return Ok(personas);
+    //    }
+
+    //    // GET api/personas/5
+    //    [HttpGet("{id}")]
+    //    public async Task<ActionResult<Persona>> Get(int id)
+    //    {
+    //        var persona = await _context.Personas.FindAsync(id);
+    //        return Ok(persona);
+    //    }
+
+    //    // POST api/personas
+    //    [HttpPost]
+    //    public void Post([FromBody] string value)
+    //    {
+    //    }
+
+    //    // PUT api/personas/5
+    //    [HttpPut("{id}")]
+    //    public void Put(int id, [FromBody] string value)
+    //    {
+    //    }
+
+    //    // DELETE api/personas/5
+    //    [HttpDelete("{id}")]
+    //    public void Delete(int id)
+    //    {
+    //    }
     }
 }
