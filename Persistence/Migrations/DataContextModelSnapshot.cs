@@ -28,11 +28,11 @@ namespace Persistence.Migrations
                     b.Property<string>("Celular")
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("Cuil")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Cuil")
+                        .HasColumnType("TEXT");
 
-                    b.Property<long>("Dni")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Dni")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");

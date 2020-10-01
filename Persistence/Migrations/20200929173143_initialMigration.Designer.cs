@@ -9,8 +9,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200926130605_AgregarPersona")]
-    partial class AgregarPersona
+    [Migration("20200929173143_initialMigration")]
+    partial class initialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,11 +30,11 @@ namespace Persistence.Migrations
                     b.Property<string>("Celular")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Cuil")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Cuil")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("Dni")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Dni")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
