@@ -1,4 +1,4 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import { Grid } from "semantic-ui-react";
 import { IPersona } from "../../../app/models/Persona";
 import PersonaDetails from "../details/PersonaDetails";
@@ -14,7 +14,9 @@ interface IProps {
   setSelectedPersona: (persona: IPersona | null) => void;
   createPersona: (persona: IPersona) => void;
   editPersona: (persona: IPersona) => void;
-  deletePersona: (id: string) => void;
+  deletePersona: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
+  submitting: boolean;
+  target: string;
 }
 
 const PersonaDashboard: React.FC<IProps> = ({
@@ -27,6 +29,8 @@ const PersonaDashboard: React.FC<IProps> = ({
   createPersona,
   editPersona,
   deletePersona,
+  submitting,
+  target,
 }) => {
   return (
     <Grid>
@@ -35,6 +39,8 @@ const PersonaDashboard: React.FC<IProps> = ({
           personas={personas}
           selectPersona={selectPersona}
           deletePersona={deletePersona}
+          submitting={submitting}
+          target={target}
         />
       </Grid.Column>
       <Grid.Column width={6}>
@@ -52,6 +58,7 @@ const PersonaDashboard: React.FC<IProps> = ({
             persona={selectedPersona!}
             createPersona={createPersona}
             editPersona={editPersona}
+            submitting={submitting}
           />
         )}
       </Grid.Column>

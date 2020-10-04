@@ -1,17 +1,21 @@
-import React from "react";
+import React, { SyntheticEvent } from "react";
 import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
 import { IPersona } from "../../../app/models/Persona";
 
 interface IProps {
   personas: IPersona[];
   selectPersona: (id: string) => void;
-  deletePersona: (id: string) => void;
+  deletePersona: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
+  submitting: boolean;
+  target: string;
 }
 
 const PersonasList: React.FC<IProps> = ({
   personas,
   selectPersona,
   deletePersona,
+  submitting,
+  target,
 }) => {
   return (
     <Segment clearing>
@@ -57,7 +61,9 @@ const PersonasList: React.FC<IProps> = ({
                   color="blue"
                 />
                 <Button
-                  onClick={() => deletePersona(persona.id)}
+                  name={persona.id}
+                  loading={target === persona.id && submitting}
+                  onClick={(e) => deletePersona(e, persona.id)}
                   floated="right"
                   content="Borrar"
                   color="red"

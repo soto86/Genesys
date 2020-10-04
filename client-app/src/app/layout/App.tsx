@@ -1,16 +1,20 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, SyntheticEvent } from "react";
 import "./App.tsx";
-import axios from "axios";
 import { Container } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 import { IPersona } from "../models/Persona";
 import NavBar from "../../features/nav/NavBar";
 import PersonaDashboard from "../../features/personas/dashboard/PersonaDashboard";
+import agent from "../api/agent";
+import LoadingComponent from "./LoadingComponent";
 
 const App = () => {
   const [personas, setPersonas] = useState<IPersona[]>([]);
   const [selectedPersona, setSelectedPersona] = useState<IPersona | null>(null);
   const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [target, setTarget] = useState("");
 
   const handleSelectedPersona = (id: string) => {
     setSelectedPersona(personas.filter((a) => a.id === id)[0]);
@@ -23,32 +27,52 @@ const App = () => {
   };
 
   const handleCreatePersona = (persona: IPersona) => {
-    setPersonas([...personas, persona]);
-    setSelectedPersona(persona);
-    setEditMode(false);
+    setSubmitting(true);
+    agent.Personas.create(persona)
+      .then(() => {
+        setPersonas([...personas, persona]);
+        setSelectedPersona(persona);
+        setEditMode(false);
+      })
+      .then(() => setSubmitting(false));
   };
 
   const handleEditPersona = (persona: IPersona) => {
-    setPersonas([...personas.filter((a) => a.id !== persona.id), persona]);
-    setSelectedPersona(persona);
-    setEditMode(false);
+    setSubmitting(true);
+    agent.Personas.update(persona)
+      .then(() => {
+        setPersonas([...personas.filter((a) => a.id !== persona.id), persona]);
+        setSelectedPersona(persona);
+        setEditMode(false);
+      })
+      .then(() => setSubmitting(false));
   };
-  const handleDeletePersona = (id: string) => {
-    setPersonas([...personas.filter((a) => a.id !== id)]);
+  const handleDeletePersona = (
+    event: SyntheticEvent<HTMLButtonElement>,
+    id: string
+  ) => {
+    setSubmitting(true);
+    setTarget(event.currentTarget.name);
+    agent.Personas.delete(id)
+      .then(() => {
+        setPersonas([...personas.filter((a) => a.id !== id)]);
+      })
+      .then(() => setSubmitting(false));
   };
 
   useEffect(() => {
-    axios
-      .get<IPersona[]>("http://localhost:5000/api/personas")
+    agent.Personas.list()
       .then((response) => {
         let personas: IPersona[] = [];
-        response.data.forEach((persona) => {
+        response.forEach((persona) => {
           persona.fechaNacimiento = persona.fechaNacimiento.split("T")[0];
           personas.push(persona);
         });
-        setPersonas(response.data);
-      });
+        setPersonas(response);
+      })
+      .then(() => setLoading(false));
   }, []);
+  if (loading) return <LoadingComponent content="Cargando..." />;
 
   return (
     <Fragment>
@@ -64,6 +88,8 @@ const App = () => {
           createPersona={handleCreatePersona}
           editPersona={handleEditPersona}
           deletePersona={handleDeletePersona}
+          submitting={submitting}
+          target={target}
         />
       </Container>
     </Fragment>

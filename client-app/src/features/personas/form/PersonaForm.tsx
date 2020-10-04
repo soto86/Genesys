@@ -8,6 +8,7 @@ interface IProps {
   persona: IPersona;
   createPersona: (persona: IPersona) => void;
   editPersona: (persona: IPersona) => void;
+  submitting: boolean;
 }
 
 const PersonaForm: React.FC<IProps> = ({
@@ -15,6 +16,7 @@ const PersonaForm: React.FC<IProps> = ({
   persona: initialFormState,
   createPersona,
   editPersona,
+  submitting,
 }) => {
   const initializeForm = () => {
     if (initialFormState) {
@@ -107,7 +109,13 @@ const PersonaForm: React.FC<IProps> = ({
           placeholder="Fecha de nacimiento"
           value={persona.fechaNacimiento}
         />
-        <Button floated="right" positive type="submit" content="Guardar" />
+        <Button
+          loading={submitting}
+          floated="right"
+          positive
+          type="submit"
+          content="Guardar"
+        />
         <Button
           onClick={() => setEditMode(false)}
           floated="right"
