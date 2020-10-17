@@ -1,69 +1,30 @@
-import React, { SyntheticEvent } from "react";
+import { observer } from "mobx-react-lite";
+import React, { useContext, useEffect } from "react";
 import { Grid } from "semantic-ui-react";
-import { IPersona } from "../../../app/models/Persona";
-import PersonaDetails from "../details/PersonaDetails";
-import PersonaForm from "../form/PersonaForm";
 import PersonasList from "./PersonasList";
+import PersonaStore from "../../../app/store/personaStore";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
-interface IProps {
-  personas: IPersona[];
-  selectPersona: (id: string) => void;
-  selectedPersona: IPersona | null;
-  editMode: boolean;
-  setEditMode: (editMode: boolean) => void;
-  setSelectedPersona: (persona: IPersona | null) => void;
-  createPersona: (persona: IPersona) => void;
-  editPersona: (persona: IPersona) => void;
-  deletePersona: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
-  submitting: boolean;
-  target: string;
-}
+const PersonaDashboard: React.FC = () => {
+  const personaStore = useContext(PersonaStore);
 
-const PersonaDashboard: React.FC<IProps> = ({
-  personas,
-  selectPersona,
-  selectedPersona,
-  editMode,
-  setEditMode,
-  setSelectedPersona,
-  createPersona,
-  editPersona,
-  deletePersona,
-  submitting,
-  target,
-}) => {
+  useEffect(() => {
+    personaStore.loadPersonas();
+  }, [personaStore]);
+
+  if (personaStore.loadingInitial)
+    return <LoadingComponent content="Cargando..." />;
+
   return (
     <Grid>
       <Grid.Column width={10}>
-        <PersonasList
-          personas={personas}
-          selectPersona={selectPersona}
-          deletePersona={deletePersona}
-          submitting={submitting}
-          target={target}
-        />
+        <PersonasList />
       </Grid.Column>
       <Grid.Column width={6}>
-        {selectedPersona && !editMode && (
-          <PersonaDetails
-            persona={selectedPersona}
-            setEditMode={setEditMode}
-            setSelectedPersona={setSelectedPersona}
-          />
-        )}
-        {editMode && (
-          <PersonaForm
-            key={(selectPersona && selectedPersona?.id) || 0}
-            setEditMode={setEditMode}
-            persona={selectedPersona!}
-            createPersona={createPersona}
-            editPersona={editPersona}
-            submitting={submitting}
-          />
-        )}
+        <h2>Persona filters</h2>
       </Grid.Column>
     </Grid>
   );
 };
 
-export default PersonaDashboard;
+export default observer(PersonaDashboard);

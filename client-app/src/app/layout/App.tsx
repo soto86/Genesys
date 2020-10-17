@@ -1,99 +1,38 @@
-import React, { useState, useEffect, Fragment, SyntheticEvent } from "react";
+import React, { Fragment } from "react";
 import "./App.tsx";
 import { Container } from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
-import { IPersona } from "../models/Persona";
 import NavBar from "../../features/nav/NavBar";
 import PersonaDashboard from "../../features/personas/dashboard/PersonaDashboard";
-import agent from "../api/agent";
-import LoadingComponent from "./LoadingComponent";
+import { observer } from "mobx-react-lite";
+import { Route, RouteComponentProps, withRouter } from "react-router-dom";
+import HomePage from "../../features/home/HomePage";
+import PersonaForm from "../../features/personas/form/PersonaForm";
+import PersonaDetails from "../../features/personas/details/PersonaDetails";
 
-const App = () => {
-  const [personas, setPersonas] = useState<IPersona[]>([]);
-  const [selectedPersona, setSelectedPersona] = useState<IPersona | null>(null);
-  const [editMode, setEditMode] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [target, setTarget] = useState("");
-
-  const handleSelectedPersona = (id: string) => {
-    setSelectedPersona(personas.filter((a) => a.id === id)[0]);
-    setEditMode(false);
-  };
-
-  const handleOpenCreateForm = () => {
-    setSelectedPersona(null);
-    setEditMode(true);
-  };
-
-  const handleCreatePersona = (persona: IPersona) => {
-    setSubmitting(true);
-    agent.Personas.create(persona)
-      .then(() => {
-        setPersonas([...personas, persona]);
-        setSelectedPersona(persona);
-        setEditMode(false);
-      })
-      .then(() => setSubmitting(false));
-  };
-
-  const handleEditPersona = (persona: IPersona) => {
-    setSubmitting(true);
-    agent.Personas.update(persona)
-      .then(() => {
-        setPersonas([...personas.filter((a) => a.id !== persona.id), persona]);
-        setSelectedPersona(persona);
-        setEditMode(false);
-      })
-      .then(() => setSubmitting(false));
-  };
-  const handleDeletePersona = (
-    event: SyntheticEvent<HTMLButtonElement>,
-    id: string
-  ) => {
-    setSubmitting(true);
-    setTarget(event.currentTarget.name);
-    agent.Personas.delete(id)
-      .then(() => {
-        setPersonas([...personas.filter((a) => a.id !== id)]);
-      })
-      .then(() => setSubmitting(false));
-  };
-
-  useEffect(() => {
-    agent.Personas.list()
-      .then((response) => {
-        let personas: IPersona[] = [];
-        response.forEach((persona) => {
-          persona.fechaNacimiento = persona.fechaNacimiento.split("T")[0];
-          personas.push(persona);
-        });
-        setPersonas(response);
-      })
-      .then(() => setLoading(false));
-  }, []);
-  if (loading) return <LoadingComponent content="Cargando..." />;
-
+const App: React.FC<RouteComponentProps> = ({ location }) => {
   return (
     <Fragment>
-      <NavBar openCreateForm={handleOpenCreateForm} />
-      <Container style={{ marginTop: "7em" }}>
-        <PersonaDashboard
-          personas={personas}
-          selectPersona={handleSelectedPersona}
-          selectedPersona={selectedPersona}
-          editMode={editMode}
-          setEditMode={setEditMode}
-          setSelectedPersona={setSelectedPersona}
-          createPersona={handleCreatePersona}
-          editPersona={handleEditPersona}
-          deletePersona={handleDeletePersona}
-          submitting={submitting}
-          target={target}
-        />
-      </Container>
+      <Route exact path="/" component={HomePage} />
+      <Route
+        path={"/(.+)"}
+        render={() => (
+          <Fragment>
+            <NavBar />
+            <Container style={{ marginTop: "7em" }}>
+              <Route exact path="/personas" component={PersonaDashboard} />
+              <Route path="/personas/:id" component={PersonaDetails} />
+              <Route
+                key={location.key}
+                path={["/createPersona", "/manage/:id"]}
+                component={PersonaForm}
+              />
+            </Container>
+          </Fragment>
+        )}
+      />
     </Fragment>
   );
 };
 
-export default App;
+export default withRouter(observer(App));

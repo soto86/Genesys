@@ -1,40 +1,52 @@
-import React from "react";
+import { observer } from "mobx-react-lite";
+import React, { useContext, useEffect } from "react";
+import { Link, RouteComponentProps } from "react-router-dom";
 import { Button, Card, Image } from "semantic-ui-react";
-import { IPersona } from "../../../app/models/Persona";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
+import PersonaStore from "../../../app/store/personaStore";
 
-interface IProps {
-  persona: IPersona;
-  setEditMode: (editMode: boolean) => void;
-  setSelectedPersona: (persona: IPersona | null) => void;
+interface DetailParams {
+  id: string;
 }
 
-const PersonaDetails: React.FC<IProps> = ({
-  persona,
-  setEditMode,
-  setSelectedPersona,
+const PersonaDetails: React.FC<RouteComponentProps<DetailParams>> = ({
+  match,
+  history,
 }) => {
+  const personaStore = useContext(PersonaStore);
+  const { persona, loadPersona, loadingInitial } = personaStore;
+
+  useEffect(() => {
+    loadPersona(match.params.id);
+  }, [loadPersona, match.params.id]);
+
+  if (loadingInitial || !persona) {
+    return <LoadingComponent content="Cargando persona..." />;
+  }
+
   return (
     <Card fluid>
       <Image src="/assets/placeholder.png" wrapped ui={false} />
       <Card.Content>
         <Card.Header>
-          {persona.apellido}, {persona.nombre}
+          {persona?.apellido}, {persona?.nombre}
         </Card.Header>
         <Card.Meta>
-          <span>{persona.celular}</span>
+          <span>{persona?.celular}</span>
         </Card.Meta>
-        <Card.Description>{persona.dni}</Card.Description>
+        <Card.Description>{persona?.dni}</Card.Description>
       </Card.Content>
       <Card.Content extra>
         <Button.Group widths={2}>
           <Button
-            onClick={() => setEditMode(true)}
+            as={Link}
+            to={`/manage/${persona.id}`}
             basic
             color="blue"
             content="Editar"
           />
           <Button
-            onClick={() => setSelectedPersona(null)}
+            onClick={() => history.push("/personas")}
             basic
             color="grey"
             content="Cancelar"
@@ -45,4 +57,4 @@ const PersonaDetails: React.FC<IProps> = ({
   );
 };
 
-export default PersonaDetails;
+export default observer(PersonaDetails);

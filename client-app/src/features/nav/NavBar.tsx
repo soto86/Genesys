@@ -1,15 +1,13 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
+import { NavLink } from "react-router-dom";
 import { Button, Container, Icon, Menu } from "semantic-ui-react";
 
-interface IProps {
-  openCreateForm: () => void;
-}
-
-const NavBar: React.FC<IProps> = ({ openCreateForm }) => {
+const NavBar: React.FC = () => {
   return (
     <Menu fixed="top" inverted>
       <Container>
-        <Menu.Item>
+        <Menu.Item header as={NavLink} exact to="/">
           <Icon
             className="dollar sign"
             size="large"
@@ -17,13 +15,18 @@ const NavBar: React.FC<IProps> = ({ openCreateForm }) => {
           />
           Genesys
         </Menu.Item>
-        <Menu.Item name="Personas" />
+        <Menu.Item name="Personas" as={NavLink} to="/personas" />
         <Menu.Item>
-          <Button onClick={openCreateForm} positive content="Agregar Persona" />
+          <Button
+            as={NavLink}
+            to="/createPersona"
+            positive
+            content="Agregar Persona"
+          />
         </Menu.Item>
       </Container>
     </Menu>
   );
 };
 
-export default NavBar;
+export default observer(NavBar);

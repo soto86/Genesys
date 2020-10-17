@@ -1,42 +1,57 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useContext, useEffect, useState } from "react";
 import { Button, Form, Segment } from "semantic-ui-react";
 import { IPersona } from "../../../app/models/Persona";
 import { v4 as uuid } from "uuid";
+import PersonaStore from "../../../app/store/personaStore";
+import { observer } from "mobx-react-lite";
+import { RouteComponentProps } from "react-router-dom";
 
-interface IProps {
-  setEditMode: (editMode: boolean) => void;
-  persona: IPersona;
-  createPersona: (persona: IPersona) => void;
-  editPersona: (persona: IPersona) => void;
-  submitting: boolean;
+interface DetailParams {
+  id: string;
 }
 
-const PersonaForm: React.FC<IProps> = ({
-  setEditMode,
-  persona: initialFormState,
-  createPersona,
-  editPersona,
-  submitting,
+const PersonaForm: React.FC<RouteComponentProps<DetailParams>> = ({
+  match,
+  history,
 }) => {
-  const initializeForm = () => {
-    if (initialFormState) {
-      return initialFormState;
-    } else {
-      return {
-        id: "",
-        nombre: "",
-        apellido: "",
-        dni: "",
-        telefono: "",
-        celular: "",
-        email: "",
-        cuil: "",
-        fechaNacimiento: "",
-      };
-    }
-  };
+  const personaStore = useContext(PersonaStore);
+  const {
+    createPersona,
+    editPersona,
+    submitting,
+    persona: initialFormState,
+    loadPersona,
+    clearPersona,
+  } = personaStore;
 
-  const [persona, setPersona] = useState<IPersona>(initializeForm);
+  const [persona, setPersona] = useState<IPersona>({
+    id: "",
+    nombre: "",
+    apellido: "",
+    dni: "",
+    telefono: "",
+    celular: "",
+    email: "",
+    cuil: "",
+    fechaNacimiento: "",
+  });
+
+  useEffect(() => {
+    if (match.params.id && persona.id.length === 0) {
+      loadPersona(match.params.id).then(
+        () => initialFormState && setPersona(initialFormState)
+      );
+    }
+    return () => {
+      clearPersona();
+    };
+  }, [
+    loadPersona,
+    clearPersona,
+    match.params.id,
+    initialFormState,
+    persona.id.length,
+  ]);
 
   const handleSubmit = () => {
     if (persona.id.length === 0) {
@@ -44,9 +59,11 @@ const PersonaForm: React.FC<IProps> = ({
         ...persona,
         id: uuid(),
       };
-      createPersona(newPersona);
+      createPersona(newPersona).then(() =>
+        history.push(`/personas/${newPersona.id}`)
+      );
     } else {
-      editPersona(persona);
+      editPersona(persona).then(() => history.push(`/personas/${persona.id}`));
     }
   };
 
@@ -117,7 +134,7 @@ const PersonaForm: React.FC<IProps> = ({
           content="Guardar"
         />
         <Button
-          onClick={() => setEditMode(false)}
+          onClick={() => history.push("/personas")}
           floated="right"
           type="button"
           content="Cancelar"
@@ -127,4 +144,4 @@ const PersonaForm: React.FC<IProps> = ({
   );
 };
 
-export default PersonaForm;
+export default observer(PersonaForm);

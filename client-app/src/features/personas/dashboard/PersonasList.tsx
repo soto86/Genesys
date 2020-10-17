@@ -1,26 +1,21 @@
-import React, { SyntheticEvent } from "react";
+import { observer } from "mobx-react-lite";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
-import { IPersona } from "../../../app/models/Persona";
+import PersonaStore from "../../../app/store/personaStore";
 
-interface IProps {
-  personas: IPersona[];
-  selectPersona: (id: string) => void;
-  deletePersona: (event: SyntheticEvent<HTMLButtonElement>, id: string) => void;
-  submitting: boolean;
-  target: string;
-}
-
-const PersonasList: React.FC<IProps> = ({
-  personas,
-  selectPersona,
-  deletePersona,
-  submitting,
-  target,
-}) => {
+const PersonasList: React.FC = () => {
+  const personaStore = useContext(PersonaStore);
+  const {
+    personasByLastName,
+    deletePersona,
+    submitting,
+    target,
+  } = personaStore;
   return (
     <Segment clearing>
       <Item.Group divided>
-        {personas.map((persona) => (
+        {personasByLastName.map((persona) => (
           <Item key={persona.id}>
             <Item.Content>
               <Item.Header as="a" style={{ marginBottom: "10" }}>
@@ -55,7 +50,8 @@ const PersonasList: React.FC<IProps> = ({
               </Item.Description>
               <Item.Extra>
                 <Button
-                  onClick={() => selectPersona(persona.id)}
+                  as={Link}
+                  to={`/personas/${persona.id}`}
                   floated="right"
                   content="Ver"
                   color="blue"
@@ -78,4 +74,4 @@ const PersonasList: React.FC<IProps> = ({
   );
 };
 
-export default PersonasList;
+export default observer(PersonasList);
