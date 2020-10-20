@@ -20,23 +20,39 @@ class PersonaStore {
   @observable target = "";
 
   @computed get personasByLastName() {
-    return Array.from(this.personaRegistry.values())
-      .slice()
-      .sort((a, b) => {
-        if (a.apellido > b.apellido) {
-          return 1;
-        } else if (a.apellido < b.apellido) {
-          return -1;
-        }
-        if (a.nombre > b.nombre) {
-          return 1;
-        } else if (a.nombre < b.nombre) {
-          return -1;
-        } else {
-          return 0;
-        }
-      });
+    console.log(
+      this.groupPersonasByLastName(Array.from(this.personaRegistry.values()))
+    );
+    return this.groupPersonasByLastName(
+      Array.from(this.personaRegistry.values())
+    );
   }
+
+  groupPersonasByLastName = (personas: IPersona[]) => {
+    const sortedPersonas = personas.slice().sort((a, b) => {
+      if (a.apellido > b.apellido) {
+        return 1;
+      } else if (a.apellido < b.apellido) {
+        return -1;
+      }
+      if (a.nombre > b.nombre) {
+        return 1;
+      } else if (a.nombre < b.nombre) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+    return Object.entries(
+      sortedPersonas.reduce((personas, persona) => {
+        const firstLetter = persona.apellido.charAt(0);
+        personas[firstLetter] = personas[firstLetter]
+          ? [...personas[firstLetter], persona]
+          : [persona];
+        return personas;
+      }, {} as { [key: string]: IPersona[] })
+    );
+  };
 
   // constructor() {
   //   makeObservable(this);
@@ -53,6 +69,7 @@ class PersonaStore {
         });
         this.loadingInitial = false;
       });
+      console.log(this.groupPersonasByLastName(personas));
     } catch (error) {
       runInAction("load personas error", () => {
         this.loadingInitial = false;

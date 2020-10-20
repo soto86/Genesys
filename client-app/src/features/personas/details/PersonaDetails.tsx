@@ -1,9 +1,13 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect } from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
-import { Button, Card, Image } from "semantic-ui-react";
+import { Button, Card, Grid, Image } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import PersonaStore from "../../../app/store/personaStore";
+import PersonaDetailedChat from "./PersonaDetailedChat";
+import PersonaDetailedHeader from "./PersonaDetailedHeader";
+import PersonaDetailedInfo from "./PersonaDetailedInfo";
+import PersonaDetailedSidebar from "./PersonaDetailedSidebar";
 
 interface DetailParams {
   id: string;
@@ -25,35 +29,46 @@ const PersonaDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   }
 
   return (
-    <Card fluid>
-      <Image src="/assets/placeholder.png" wrapped ui={false} />
-      <Card.Content>
-        <Card.Header>
-          {persona?.apellido}, {persona?.nombre}
-        </Card.Header>
-        <Card.Meta>
-          <span>{persona?.celular}</span>
-        </Card.Meta>
-        <Card.Description>{persona?.dni}</Card.Description>
-      </Card.Content>
-      <Card.Content extra>
-        <Button.Group widths={2}>
-          <Button
-            as={Link}
-            to={`/manage/${persona.id}`}
-            basic
-            color="blue"
-            content="Editar"
-          />
-          <Button
-            onClick={() => history.push("/personas")}
-            basic
-            color="grey"
-            content="Cancelar"
-          />
-        </Button.Group>
-      </Card.Content>
-    </Card>
+    <Grid>
+      <Grid.Column width={8}>
+        <PersonaDetailedHeader persona={persona} />
+        <PersonaDetailedInfo persona={persona} />
+        <PersonaDetailedChat />
+      </Grid.Column>
+      <Grid.Column width={8}>
+        <PersonaDetailedSidebar />
+      </Grid.Column>
+    </Grid>
+
+    // <Card>
+    //   <Image src="/assets/user.png" wrapped ui={false} />
+    //   <Card.Content>
+    //     <Card.Header>
+    //       {persona?.apellido}, {persona?.nombre}
+    //     </Card.Header>
+    //     <Card.Meta>
+    //       <span>{persona?.celular}</span>
+    //     </Card.Meta>
+    //     <Card.Description>{persona?.dni}</Card.Description>
+    //   </Card.Content>
+    //   <Card.Content extra>
+    //     <Button.Group widths={2}>
+    //       <Button
+    //         as={Link}
+    //         to={`/manage/${persona.id}`}
+    //         basic
+    //         color="blue"
+    //         content="Editar"
+    //       />
+    //       <Button
+    //         onClick={() => history.push("/personas")}
+    //         basic
+    //         color="grey"
+    //         content="Cancelar"
+    //       />
+    //     </Button.Group>
+    //   </Card.Content>
+    // </Card>
   );
 };
 
