@@ -4,7 +4,7 @@ import { Item, Label } from "semantic-ui-react";
 import PersonaStore from "../../../app/store/personaStore";
 import PersonaListItem from "./PersonaListItem";
 
-const PersonasList: React.FC = () => {
+const PersonaList: React.FC = () => {
   const personaStore = useContext(PersonaStore);
   const { personasByLastName } = personaStore;
   return (
@@ -25,4 +25,4 @@ const PersonasList: React.FC = () => {
   );
 };
 
-export default observer(PersonasList);
+export default observer(PersonaList);

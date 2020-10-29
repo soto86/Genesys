@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Persistence;
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 
 namespace Application.Personas
 {
@@ -24,7 +26,8 @@ namespace Application.Personas
             {
                 var persona = await _context.Personas.FindAsync(request.Id);
 
-                if (persona == null) throw new Exception("Could not find the Person");
+                if (persona == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { Persona = "Not found" });
 
                 _context.Remove(persona);
 

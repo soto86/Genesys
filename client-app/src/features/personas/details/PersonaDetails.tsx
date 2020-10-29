@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect } from "react";
-import { Link, RouteComponentProps } from "react-router-dom";
-import { Button, Card, Grid, Image } from "semantic-ui-react";
+import { RouteComponentProps } from "react-router-dom";
+import { Grid } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import PersonaStore from "../../../app/store/personaStore";
 import PersonaDetailedChat from "./PersonaDetailedChat";
@@ -22,11 +22,13 @@ const PersonaDetails: React.FC<RouteComponentProps<DetailParams>> = ({
 
   useEffect(() => {
     loadPersona(match.params.id);
-  }, [loadPersona, match.params.id]);
+  }, [loadPersona, match.params.id, history]);
 
-  if (loadingInitial || !persona) {
+  if (loadingInitial) {
     return <LoadingComponent content="Cargando persona..." />;
   }
+
+  if (!persona) return <h2>No se encontró la persona</h2>;
 
   return (
     <Grid>

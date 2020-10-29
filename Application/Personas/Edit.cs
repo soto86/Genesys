@@ -1,8 +1,11 @@
 ﻿using MediatR;
 using Persistence;
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
+using FluentValidation;
 
 namespace Application.Personas
 {
@@ -20,6 +23,19 @@ namespace Application.Personas
             public string Cuil { get; set; }
             public DateTime? FechaNacimiento { get; set; }
         }
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Nombre).NotEmpty();
+                RuleFor(x => x.Apellido).NotEmpty();
+                RuleFor(x => x.Telefono).NotEmpty();
+                RuleFor(x => x.Celular).NotEmpty();
+                RuleFor(x => x.Email).NotEmpty();
+                RuleFor(x => x.Cuil).NotEmpty();
+                RuleFor(x => x.FechaNacimiento).NotEmpty();
+            }
+        }
         public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
@@ -32,7 +48,7 @@ namespace Application.Personas
             {
                 var persona = await _context.Personas.FindAsync(request.Id);
                 if (persona == null)
-                    throw new Exception("Could not find Person");
+                    throw new RestException(HttpStatusCode.NotFound, new { Persona = "Not found" });
 
                 persona.Apellido = request.Apellido ?? persona.Apellido;
                 persona.Nombre = request.Nombre ?? persona.Nombre;

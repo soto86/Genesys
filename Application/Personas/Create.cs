@@ -1,9 +1,10 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Domain;
+﻿using Domain;
 using MediatR;
 using Persistence;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentValidation;
 
 namespace Application.Personas
 {
@@ -20,6 +21,20 @@ namespace Application.Personas
             public string Email { get; set; }
             public string Cuil { get; set; }
             public DateTime FechaNacimiento { get; set; }
+        }
+
+        public class CommandValidator :  AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Nombre).NotEmpty();
+                RuleFor(x => x.Apellido).NotEmpty();
+                RuleFor(x => x.Telefono).NotEmpty();
+                RuleFor(x => x.Celular).NotEmpty();
+                RuleFor(x => x.Email).NotEmpty();
+                RuleFor(x => x.Cuil).NotEmpty();
+                RuleFor(x => x.FechaNacimiento).NotEmpty();
+            }
         }
         public class Handler : IRequestHandler<Command>
         {

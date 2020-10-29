@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect } from "react";
 import { Grid } from "semantic-ui-react";
-import PersonasList from "./PersonasList";
+import PersonaList from "./PersonaList";
 import PersonaStore from "../../../app/store/personaStore";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 
@@ -18,7 +18,7 @@ const PersonaDashboard: React.FC = () => {
   return (
     <Grid>
       <Grid.Column width={10}>
-        <PersonasList />
+        <PersonaList />
       </Grid.Column>
       <Grid.Column width={6}>
         <h2>Persona filters</h2>

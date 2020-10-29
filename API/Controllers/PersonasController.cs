@@ -28,7 +28,7 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Persona>> Details(Guid id)
         {
-            return await _mediator.Send(new Details.Query {Id = id});
+            return await _mediator.Send(new Details.Query { Id = id });
         }
 
         [HttpPost]
@@ -47,61 +47,61 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Unit>> Delete(Guid id)
         {
-            return await _mediator.Send(new Delete.Command {Id = id});
+            return await _mediator.Send(new Delete.Command { Id = id });
         }
         //public class PersonasController : ControllerBase
-    //{
-    //    //private readonly IMediator _mediator;
-    //    private readonly DataContext _context;
+        //{
+        //    //private readonly IMediator _mediator;
+        //    private readonly DataContext _context;
 
-    //    public PersonasController(DataContext context)
-    //    {
-    //        _context = context;
-    //    }
+        //    public PersonasController(DataContext context)
+        //    {
+        //        _context = context;
+        //    }
 
-    //    //public PersonasController(IMediator mediator)
-    //    //{
-    //    //    _mediator = mediator;
-    //    //}
+        //    //public PersonasController(IMediator mediator)
+        //    //{
+        //    //    _mediator = mediator;
+        //    //}
 
-    //    //[HttpGet]
-    //    //public async Task<ActionResult<List<Persona>>> List()
-    //    //{
-    //    //    return await _mediator.Send(new List.Query());
-    //    //}
+        //    //[HttpGet]
+        //    //public async Task<ActionResult<List<Persona>>> List()
+        //    //{
+        //    //    return await _mediator.Send(new List.Query());
+        //    //}
 
-    //    //GET api/personas
-    //   [HttpGet]
-    //    public async Task<ActionResult<IEnumerable<Persona>>> Get()
-    //    {
-    //        var personas = await _context.Personas.ToListAsync();
-    //        return Ok(personas);
-    //    }
+        //    //GET api/personas
+        //   [HttpGet]
+        //    public async Task<ActionResult<IEnumerable<Persona>>> Get()
+        //    {
+        //        var personas = await _context.Personas.ToListAsync();
+        //        return Ok(personas);
+        //    }
 
-    //    // GET api/personas/5
-    //    [HttpGet("{id}")]
-    //    public async Task<ActionResult<Persona>> Get(int id)
-    //    {
-    //        var persona = await _context.Personas.FindAsync(id);
-    //        return Ok(persona);
-    //    }
+        //    // GET api/personas/5
+        //    [HttpGet("{id}")]
+        //    public async Task<ActionResult<Persona>> Get(int id)
+        //    {
+        //        var persona = await _context.Personas.FindAsync(id);
+        //        return Ok(persona);
+        //    }
 
-    //    // POST api/personas
-    //    [HttpPost]
-    //    public void Post([FromBody] string value)
-    //    {
-    //    }
+        //    // POST api/personas
+        //    [HttpPost]
+        //    public void Post([FromBody] string value)
+        //    {
+        //    }
 
-    //    // PUT api/personas/5
-    //    [HttpPut("{id}")]
-    //    public void Put(int id, [FromBody] string value)
-    //    {
-    //    }
+        //    // PUT api/personas/5
+        //    [HttpPut("{id}")]
+        //    public void Put(int id, [FromBody] string value)
+        //    {
+        //    }
 
-    //    // DELETE api/personas/5
-    //    [HttpDelete("{id}")]
-    //    public void Delete(int id)
-    //    {
-    //    }
+        //    // DELETE api/personas/5
+        //    [HttpDelete("{id}")]
+        //    public void Delete(int id)
+        //    {
+        //    }
     }
 }

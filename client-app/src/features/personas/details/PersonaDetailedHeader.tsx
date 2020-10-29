@@ -8,14 +8,14 @@ const personaImageStyle = {
   margin: "auto",
 };
 
-const PersonaImageTextStyle = {
-  position: "absolute",
-  bottom: "5%",
-  left: "5%",
-  width: "100%",
-  height: "auto",
-  color: "white",
-};
+// const PersonaImageTextStyle = {
+//   position: "absolute",
+//   bottom: "5%",
+//   left: "5%",
+//   width: "100%",
+//   height: "auto",
+//   color: "white",
+// };
 
 const PersonaDetailedHeader: React.FC<{ persona: IPersona }> = ({
   persona,
@@ -25,7 +25,7 @@ const PersonaDetailedHeader: React.FC<{ persona: IPersona }> = ({
       <Segment basic attached="top" style={{ padding: "0" }}>
         <Image
           src={`/assets/user.png`}
-          fluid
+          //fluid
           size="medium"
           style={personaImageStyle}
         />

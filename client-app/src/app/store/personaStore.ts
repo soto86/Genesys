@@ -20,9 +20,6 @@ class PersonaStore {
   @observable target = "";
 
   @computed get personasByLastName() {
-    console.log(
-      this.groupPersonasByLastName(Array.from(this.personaRegistry.values()))
-    );
     return this.groupPersonasByLastName(
       Array.from(this.personaRegistry.values())
     );
@@ -69,7 +66,6 @@ class PersonaStore {
         });
         this.loadingInitial = false;
       });
-      console.log(this.groupPersonasByLastName(personas));
     } catch (error) {
       runInAction("load personas error", () => {
         this.loadingInitial = false;
