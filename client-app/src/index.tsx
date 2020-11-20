@@ -5,9 +5,13 @@ import { createBrowserHistory } from "history";
 import App from "./app/layout/App";
 import "./app/layout/styles.css";
 import "react-toastify/dist/ReactToastify.min.css";
+import "react-widgets/dist/css/react-widgets.css";
 import * as serviceWorker from "./serviceWorker";
-//import "mobx-react-lite/batchingForReactDom";
 import ScrollToTop from "./app/layout/ScrollToTop";
+import dateFnsLocalizer from "react-widgets-date-fns";
+//import "mobx-react-lite/batchingForReactDom";
+
+dateFnsLocalizer();
 
 export const history = createBrowserHistory();
 

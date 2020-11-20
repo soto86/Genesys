@@ -7,6 +7,8 @@ import {
   runInAction,
 } from "mobx";
 import { createContext, SyntheticEvent } from "react";
+import { toast } from "react-toastify";
+import { history } from "../..";
 import agent from "../api/agent";
 import { IPersona } from "../models/Persona";
 
@@ -61,7 +63,7 @@ class PersonaStore {
       const personas = await agent.Personas.list();
       runInAction("loading personas", () => {
         personas.forEach((persona) => {
-          persona.fechaNacimiento = persona.fechaNacimiento.split("T")[0];
+          persona.fechaNacimiento = new Date(persona.fechaNacimiento!);
           this.personaRegistry.set(persona.id, persona);
         });
         this.loadingInitial = false;
@@ -78,14 +80,18 @@ class PersonaStore {
     let persona = this.getPersona(id);
     if (persona) {
       this.persona = persona;
+      return persona;
     } else {
       this.loadingInitial = true;
       try {
         persona = await agent.Personas.details(id);
         runInAction("getting persona", () => {
+          persona.fechaNacimiento = new Date(persona.fechaNacimiento);
           this.persona = persona;
+          this.personaRegistry.set(persona.id, persona);
           this.loadingInitial = false;
         });
+        return persona;
       } catch (error) {
         runInAction("get persona error", () => {
           this.loadingInitial = false;
@@ -111,11 +117,13 @@ class PersonaStore {
         this.personaRegistry.set(persona.id, persona);
         this.submitting = false;
       });
+      history.push(`/personas/${persona.id}`);
     } catch (error) {
       runInAction("create persona error", () => {
         this.submitting = false;
       });
-      console.log(error);
+      toast.error("Problem submitting data");
+      console.log(error.response);
     }
   };
   @action editPersona = async (persona: IPersona) => {
@@ -127,11 +135,12 @@ class PersonaStore {
         this.persona = persona;
         this.submitting = false;
       });
+      history.push(`/personas/${persona.id}`);
     } catch (error) {
       runInAction("edit persona error", () => {
         this.submitting = false;
       });
-      console.log(error);
+      console.log(error.response);
     }
   };
 

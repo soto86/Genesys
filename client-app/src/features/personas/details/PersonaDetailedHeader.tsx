@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
+import { Link } from "react-router-dom";
 import { Button, Header, Image, Item, Segment } from "semantic-ui-react";
 import { IPersona } from "../../../app/models/Persona";
 
@@ -55,7 +56,12 @@ const PersonaDetailedHeader: React.FC<{ persona: IPersona }> = ({
       <Segment clearing attached="bottom">
         {/* <Button color="teal">Join Activity</Button>
         <Button>Cancel attendance</Button> */}
-        <Button color="orange" floated="right">
+        <Button
+          as={Link}
+          to={`/manage/${persona.id}`}
+          color="orange"
+          floated="right"
+        >
           Editar
         </Button>
       </Segment>

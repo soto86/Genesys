@@ -1,10 +1,45 @@
-import React, { FormEvent, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Form, Grid, Segment } from "semantic-ui-react";
-import { IPersona } from "../../../app/models/Persona";
+import { personaFormValue } from "../../../app/models/Persona";
 import { v4 as uuid } from "uuid";
 import PersonaStore from "../../../app/store/personaStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
+import { Form as FinalForm, Field } from "react-final-form";
+import TextInput from "../../../app/common/form/TextInput";
+import TextAreaInput from "../../../app/common/form/TextAreaInput";
+import DateInput from "../../../app/common/form/DateInput";
+import { combineDateAndTime } from "../../../app/common/util/util";
+import {
+  combineValidators,
+  composeValidators,
+  createValidator,
+  isNumeric,
+  isRequired,
+} from "revalidate";
+//import SelectInput from "../../../app/common/form/SelectInput";
+//import { category } from "../../../app/common/form/options/categoryOptions";
+
+const isValidEmail = createValidator(
+  (message) => (value) => {
+    if (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+      return message;
+    }
+  },
+  "Invalid email address"
+);
+
+const validate = combineValidators({
+  nombre: isRequired({ message: "El nombre es requerido" }),
+  apellido: isRequired("apellido"),
+  dni: composeValidators(isRequired("dni"), isNumeric("dni"))(),
+  telefono: composeValidators(isRequired("telefono"), isNumeric("telefono"))(),
+  email: composeValidators(isRequired("email"), isValidEmail())(),
+  cuil: composeValidators(isRequired("cuil"), isNumeric("cuil"))(),
+  celular: composeValidators(isRequired("celular"), isNumeric("celular"))(),
+  fechaNacimiento: isRequired("Fecha de nacimiento"),
+  time: isRequired("Hora de nacimiento"),
+});
 
 interface DetailParams {
   id: string;
@@ -15,133 +50,130 @@ const PersonaForm: React.FC<RouteComponentProps<DetailParams>> = ({
   history,
 }) => {
   const personaStore = useContext(PersonaStore);
-  const {
-    createPersona,
-    editPersona,
-    submitting,
-    persona: initialFormState,
-    loadPersona,
-    clearPersona,
-  } = personaStore;
+  const { createPersona, editPersona, submitting, loadPersona } = personaStore;
 
-  const [persona, setPersona] = useState<IPersona>({
-    id: "",
-    nombre: "",
-    apellido: "",
-    dni: "",
-    telefono: "",
-    celular: "",
-    email: "",
-    cuil: "",
-    fechaNacimiento: "",
-  });
+  const [persona, setPersona] = useState(new personaFormValue());
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (match.params.id && persona.id.length === 0) {
-      loadPersona(match.params.id).then(
-        () => initialFormState && setPersona(initialFormState)
-      );
+    if (match.params.id) {
+      setLoading(true);
+      loadPersona(match.params.id)
+        .then((persona) => setPersona(new personaFormValue(persona)))
+        .finally(() => setLoading(false));
     }
-    return () => {
-      clearPersona();
-    };
-  }, [
-    loadPersona,
-    clearPersona,
-    match.params.id,
-    initialFormState,
-    persona.id.length,
-  ]);
+  }, [loadPersona, match.params.id]);
 
-  const handleSubmit = () => {
-    if (persona.id.length === 0) {
+  const handleFinalFormSubmit = (values: any) => {
+    const dateAndTime = combineDateAndTime(values.fechaNacimiento, values.time);
+    const { fechaNacimiento, time, ...persona } = values;
+    persona.fechaNacimiento = dateAndTime;
+    if (!persona.id) {
       let newPersona = {
         ...persona,
         id: uuid(),
       };
-      createPersona(newPersona).then(() =>
-        history.push(`/personas/${newPersona.id}`)
-      );
+      createPersona(newPersona);
     } else {
-      editPersona(persona).then(() => history.push(`/personas/${persona.id}`));
+      editPersona(persona);
     }
-  };
-
-  const handleInputChange = (
-    event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = event.currentTarget;
-    setPersona({ ...persona, [name]: value });
   };
 
   return (
     <Grid>
       <Grid.Column width={8}>
         <Segment clearing>
-          <Form onSubmit={handleSubmit}>
-            <Form.Input
-              onChange={handleInputChange}
-              name="nombre"
-              placeholder="Nombre"
-              value={persona.nombre}
-            />
-            <Form.Input
-              onChange={handleInputChange}
-              name="apellido"
-              placeholder="Apellido"
-              value={persona.apellido}
-            />
-            <Form.Input
-              onChange={handleInputChange}
-              name="dni"
-              placeholder="Dni"
-              value={persona.dni}
-            />
-            <Form.Input
-              onChange={handleInputChange}
-              name="telefono"
-              placeholder="Telefono"
-              value={persona.telefono}
-            />
-            <Form.Input
-              onChange={handleInputChange}
-              name="celular"
-              placeholder="Celular"
-              value={persona.celular}
-            />
-            <Form.Input
-              onChange={handleInputChange}
-              name="email"
-              placeholder="Email"
-              value={persona.email}
-            />
-            <Form.Input
-              onChange={handleInputChange}
-              name="cuil"
-              placeholder="Cuil"
-              value={persona.cuil}
-            />
-            <Form.Input
-              onChange={handleInputChange}
-              name="fechaNacimiento"
-              type="date"
-              placeholder="Fecha de nacimiento"
-              value={persona.fechaNacimiento}
-            />
-            <Button
-              loading={submitting}
-              floated="right"
-              positive
-              type="submit"
-              content="Guardar"
-            />
-            <Button
-              onClick={() => history.push("/personas")}
-              floated="right"
-              type="button"
-              content="Cancelar"
-            />
-          </Form>
+          <FinalForm
+            validate={validate}
+            initialValues={persona}
+            onSubmit={handleFinalFormSubmit}
+            render={({ handleSubmit, invalid, pristine }) => (
+              <Form onSubmit={handleSubmit} loading={loading}>
+                <Field
+                  name="nombre"
+                  placeholder="Nombre"
+                  value={persona.nombre}
+                  component={TextInput}
+                />
+                <Field
+                  name="apellido"
+                  placeholder="Apellido"
+                  rows={3}
+                  value={persona.apellido}
+                  component={TextAreaInput}
+                />
+                <Field
+                  component={TextInput}
+                  name="dni"
+                  placeholder="Dni"
+                  value={persona.dni}
+                />
+                <Field
+                  name="telefono"
+                  placeholder="Telefono"
+                  value={persona.telefono}
+                  component={TextInput}
+                  // component={SelectInput}
+                  // options={category}
+                />
+                <Field
+                  name="celular"
+                  placeholder="Celular"
+                  value={persona.celular}
+                  component={TextInput}
+                />
+                <Field
+                  name="email"
+                  placeholder="Email"
+                  value={persona.email}
+                  component={TextInput}
+                />
+                <Field
+                  name="cuil"
+                  placeholder="Cuil"
+                  value={persona.cuil}
+                  component={TextInput}
+                />
+                <Form.Group widths="equal">
+                  <Field
+                    component={DateInput}
+                    name="fechaNacimiento"
+                    date={true}
+                    placeholder="Fecha de nacimiento"
+                    value={persona.fechaNacimiento}
+                    //type="date"
+                  />
+                  <Field
+                    component={DateInput}
+                    name="time"
+                    time={true}
+                    placeholder="Hora de nacimiento"
+                    value={persona.time}
+                    //type="date"
+                  />
+                </Form.Group>
+                <Button
+                  loading={submitting}
+                  disabled={loading || invalid || pristine}
+                  floated="right"
+                  positive
+                  type="submit"
+                  content="Guardar"
+                />
+                <Button
+                  onClick={
+                    persona.id
+                      ? () => history.push(`/personas/${persona.id}`)
+                      : () => history.push("/personas")
+                  }
+                  disabled={loading}
+                  floated="right"
+                  type="button"
+                  content="Cancelar"
+                />
+              </Form>
+            )}
+          />
         </Segment>
       </Grid.Column>
     </Grid>

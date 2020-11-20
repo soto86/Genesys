@@ -1,6 +1,7 @@
 import React from "react";
 import { Segment, Grid, Icon } from "semantic-ui-react";
 import { IPersona } from "../../../app/models/Persona";
+import { format } from "date-fns";
 
 const PersonaDetailedInfo: React.FC<{ persona: IPersona }> = ({ persona }) => {
   return (
@@ -11,7 +12,7 @@ const PersonaDetailedInfo: React.FC<{ persona: IPersona }> = ({ persona }) => {
             <Icon size="large" color="teal" name="info" />
           </Grid.Column>
           <Grid.Column width={15}>
-            <p>{"description"}</p>
+            <p>{"Monotributo"}</p>
           </Grid.Column>
         </Grid>
       </Segment>
@@ -21,7 +22,10 @@ const PersonaDetailedInfo: React.FC<{ persona: IPersona }> = ({ persona }) => {
             <Icon name="calendar" size="large" color="teal" />
           </Grid.Column>
           <Grid.Column width={15}>
-            <span>{persona.fechaNacimiento}</span>
+            <span>
+              {format(persona.fechaNacimiento, "dd-MM-yyyy")}
+              {/* at{" "} {format(persona.fechaNacimiento, "HH:mm:ss OOOO ")} */}
+            </span>
           </Grid.Column>
         </Grid>
       </Segment>
@@ -32,7 +36,7 @@ const PersonaDetailedInfo: React.FC<{ persona: IPersona }> = ({ persona }) => {
           </Grid.Column>
           <Grid.Column width={11}>
             <span>
-              {"venue"}, {"city"}
+              {persona.email}, {persona.celular}
             </span>
           </Grid.Column>
         </Grid>

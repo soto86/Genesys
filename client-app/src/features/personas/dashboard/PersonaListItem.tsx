@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
 import { IPersona } from "../../../app/models/Persona";
 import PersonaStore from "../../../app/store/personaStore";
+import { format } from "date-fns";
 
 const PersonaListItem: React.FC<{ persona: IPersona }> = ({ persona }) => {
   const personaStore = useContext(PersonaStore);
@@ -51,7 +52,7 @@ const PersonaListItem: React.FC<{ persona: IPersona }> = ({ persona }) => {
               </div>
               <div>
                 <Icon name="calendar alternate" />
-                {persona.fechaNacimiento}
+                {format(persona.fechaNacimiento, "dd-MM-yyyy")}
               </div>
             </Item.Description>
             <Item.Extra>
