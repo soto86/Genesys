@@ -30,9 +30,12 @@ const isValidEmail = createValidator(
 );
 
 const validate = combineValidators({
-  nombre: isRequired({ message: "El nombre es requerido" }),
+  nombre: isRequired({ message: "El nombre es obligatorio" }),
   apellido: isRequired("apellido"),
-  dni: composeValidators(isRequired("dni"), isNumeric("dni"))(),
+  dni: composeValidators(
+    isRequired({ message: "El dni es obligatorio" }),
+    isNumeric("dni")
+  )(),
   telefono: composeValidators(isRequired("telefono"), isNumeric("telefono"))(),
   email: composeValidators(isRequired("email"), isValidEmail())(),
   cuil: composeValidators(isRequired("cuil"), isNumeric("cuil"))(),
