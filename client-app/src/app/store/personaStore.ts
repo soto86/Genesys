@@ -3,18 +3,21 @@ import {
   computed,
   // makeObservable,
   observable,
-  configure,
   runInAction,
 } from "mobx";
-import { createContext, SyntheticEvent } from "react";
+import { SyntheticEvent } from "react";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import agent from "../api/agent";
 import { IPersona } from "../models/Persona";
+import { RootStore } from "./rootStore";
 
-configure({ enforceActions: "always" });
+export default class PersonaStore {
+  rootStore: RootStore;
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
+  }
 
-class PersonaStore {
   @observable personaRegistry = new Map();
   @observable persona: IPersona | null = null;
   @observable loadingInitial = false;
@@ -166,5 +169,3 @@ class PersonaStore {
     }
   };
 }
-
-export default createContext(new PersonaStore());

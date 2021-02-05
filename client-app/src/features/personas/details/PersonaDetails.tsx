@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { Grid } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
-import PersonaStore from "../../../app/store/personaStore";
+import { RootStoreContext } from "../../../app/store/rootStore";
 import PersonaDetailedChat from "./PersonaDetailedChat";
 import PersonaDetailedHeader from "./PersonaDetailedHeader";
 import PersonaDetailedInfo from "./PersonaDetailedInfo";
@@ -17,8 +17,8 @@ const PersonaDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   match,
   history,
 }) => {
-  const personaStore = useContext(PersonaStore);
-  const { persona, loadPersona, loadingInitial } = personaStore;
+  const rootStore = useContext(RootStoreContext);
+  const { persona, loadPersona, loadingInitial } = rootStore.personaStore;
 
   useEffect(() => {
     loadPersona(match.params.id);

@@ -2,18 +2,18 @@ import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect } from "react";
 import { Grid } from "semantic-ui-react";
 import PersonaList from "./PersonaList";
-import PersonaStore from "../../../app/store/personaStore";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
+import { RootStoreContext } from "../../../app/store/rootStore";
 
 const PersonaDashboard: React.FC = () => {
-  const personaStore = useContext(PersonaStore);
+  const rootStore = useContext(RootStoreContext);
+  const { loadPersonas, loadingInitial } = rootStore.personaStore;
 
   useEffect(() => {
-    personaStore.loadPersonas();
-  }, [personaStore]);
+    loadPersonas();
+  }, [loadPersonas]);
 
-  if (personaStore.loadingInitial)
-    return <LoadingComponent content="Cargando..." />;
+  if (loadingInitial) return <LoadingComponent content="Cargando..." />;
 
   return (
     <Grid>

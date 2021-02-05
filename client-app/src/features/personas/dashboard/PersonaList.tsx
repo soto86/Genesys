@@ -1,12 +1,12 @@
 import { observer } from "mobx-react-lite";
 import React, { Fragment, useContext } from "react";
 import { Item, Label } from "semantic-ui-react";
-import PersonaStore from "../../../app/store/personaStore";
+import { RootStoreContext } from "../../../app/store/rootStore";
 import PersonaListItem from "./PersonaListItem";
 
 const PersonaList: React.FC = () => {
-  const personaStore = useContext(PersonaStore);
-  const { personasByLastName } = personaStore;
+  const rootStore = useContext(RootStoreContext);
+  const { personasByLastName } = rootStore.personaStore;
   return (
     <Fragment>
       {personasByLastName.map(([group, personas]) => (

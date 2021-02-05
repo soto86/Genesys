@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button, Form, Grid, Segment } from "semantic-ui-react";
 import { personaFormValue } from "../../../app/models/Persona";
 import { v4 as uuid } from "uuid";
-import PersonaStore from "../../../app/store/personaStore";
 import { observer } from "mobx-react-lite";
 import { RouteComponentProps } from "react-router-dom";
 import { Form as FinalForm, Field } from "react-final-form";
@@ -17,6 +16,7 @@ import {
   isNumeric,
   isRequired,
 } from "revalidate";
+import { RootStoreContext } from "../../../app/store/rootStore";
 //import SelectInput from "../../../app/common/form/SelectInput";
 //import { category } from "../../../app/common/form/options/categoryOptions";
 
@@ -52,8 +52,13 @@ const PersonaForm: React.FC<RouteComponentProps<DetailParams>> = ({
   match,
   history,
 }) => {
-  const personaStore = useContext(PersonaStore);
-  const { createPersona, editPersona, submitting, loadPersona } = personaStore;
+  const rootStore = useContext(RootStoreContext);
+  const {
+    createPersona,
+    editPersona,
+    submitting,
+    loadPersona,
+  } = rootStore.personaStore;
 
   const [persona, setPersona] = useState(new personaFormValue());
   const [loading, setLoading] = useState(false);

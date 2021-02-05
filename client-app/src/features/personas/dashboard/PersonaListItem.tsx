@@ -2,12 +2,12 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
 import { IPersona } from "../../../app/models/Persona";
-import PersonaStore from "../../../app/store/personaStore";
 import { format } from "date-fns";
+import { RootStoreContext } from "../../../app/store/rootStore";
 
 const PersonaListItem: React.FC<{ persona: IPersona }> = ({ persona }) => {
-  const personaStore = useContext(PersonaStore);
-  const { deletePersona, submitting, target } = personaStore;
+  const rootStore = useContext(RootStoreContext);
+  const { deletePersona, submitting, target } = rootStore.personaStore;
 
   return (
     <Segment.Group>
