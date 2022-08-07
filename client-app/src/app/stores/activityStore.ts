@@ -19,6 +19,18 @@ export default class ActivityStore {
     );
   }
 
+  get groupedActivities() {
+    return Object.entries(
+      this.activitiesByDate.reduce((activities, activity) => {
+        const date = activity.date;
+        activities[date] = activities[date]
+          ? [...activities[date], activity]
+          : [activity];
+        return activities;
+      }, {} as { [key: string]: Activity[] })
+    );
+  }
+
   loadActivities = async () => {
     this.loadingInitial = true;
     try {
@@ -33,9 +45,6 @@ export default class ActivityStore {
     }
   };
 
-  setLoadingInitial = (state: boolean) => {
-    this.loadingInitial = state;
-  };
   loadActivity = async (id: string) => {
     let activity = this.getActivity(id);
     if (activity) {
@@ -57,12 +66,18 @@ export default class ActivityStore {
       }
     }
   };
+
   private setActivity = (activity: Activity) => {
     activity.date = activity.date.split("T")[0];
     this.activityRegistry.set(activity.id, activity);
   };
+
   private getActivity = (id: string) => {
     return this.activityRegistry.get(id);
+  };
+
+  setLoadingInitial = (state: boolean) => {
+    this.loadingInitial = state;
   };
 
   createActivity = async (activity: Activity) => {
@@ -82,6 +97,7 @@ export default class ActivityStore {
       });
     }
   };
+
   updateActivity = async (activity: Activity) => {
     this.loading = true;
     try {
@@ -99,9 +115,11 @@ export default class ActivityStore {
       });
     }
   };
+
   deleteActivity = async (id: string) => {
     this.loading = true;
     try {
+      await agent.Activities.delete(id);
       runInAction(() => {
         this.activityRegistry.delete(id);
         this.loading = false;
