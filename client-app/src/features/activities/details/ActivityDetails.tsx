@@ -17,9 +17,11 @@ export default observer(function ActivityDetails() {
     loadingInitial,
   } = activityStore;
   const { id } = useParams<{ id: string }>();
+
   useEffect(() => {
     if (id) loadActivity(id);
   }, [id, loadActivity]);
+
   if (loadingInitial || !activity) return <LoadingComponent />;
 
   return (
@@ -30,7 +32,7 @@ export default observer(function ActivityDetails() {
         <ActivityDetailedChat />
       </Grid.Column>
       <Grid.Column width={6}>
-        <ActivityDetailedSidebar />
+        <ActivityDetailedSidebar activity={activity} />
       </Grid.Column>
     </Grid>
   );
