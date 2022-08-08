@@ -23,9 +23,9 @@ export default observer(function RegisterForm() {
         >
             {({handleSubmit, isSubmitting, errors, isValid, dirty}) => (
                 <Form className='ui form error' onSubmit={handleSubmit} autoComplete='off'>
-                    <Header as='h2' content='Sign up to Reactivites' color='teal' textAlign='center' />
-                    <MyTextInput name='displayName' placeholder='Display Name' />
-                    <MyTextInput name='username' placeholder='Username' />
+                    <Header as='h2' content='Registrarse en Genesys' color='teal' textAlign='center' />
+                    <MyTextInput name='displayName' placeholder='Nombre' />
+                    <MyTextInput name='username' placeholder='Usuario' />
                     <MyTextInput name='email' placeholder='Email' />
                     <MyTextInput name='password' placeholder='Password' type='password' />
                     <ErrorMessage 
@@ -33,7 +33,7 @@ export default observer(function RegisterForm() {
                         <ValidationErrors errors={errors.error}/>}
                     />
                     <Button disabled={!isValid || !dirty || isSubmitting} 
-                        loading={isSubmitting} positive content='Register' type='submit' fluid />
+                        loading={isSubmitting} positive content='Registrar' type='submit' fluid />
                 </Form>
             )}
         </Formik>

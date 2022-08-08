@@ -27,7 +27,7 @@ export default observer(function FollowButton({ profile }: Props) {
         <Button
           fluid
           color="teal"
-          content={profile.following ? "Following" : "Not following"}
+          content={profile.following ? "Siguiendo" : "No estas siguiendo"}
         />
       </Reveal.Content>
       <Reveal.Content hidden style={{ width: "100%" }}>
@@ -35,7 +35,7 @@ export default observer(function FollowButton({ profile }: Props) {
           fluid
           basic
           color={profile.following ? "red" : "green"}
-          content={profile.following ? "Unfollow" : "Follow"}
+          content={profile.following ? "Dejar de Seguir" : "Seguir"}
           loading={loading}
           onClick={(e) => handleFollow(e, profile.username)}
         />

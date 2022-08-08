@@ -25,7 +25,7 @@ export default observer(function ProfileCard({ profile }: Props) {
       </Card.Content>
       <Card.Content extra>
         <Icon name="user" />
-        {profile.followersCount} followers
+        {profile.followersCount} Seguidores
       </Card.Content>
       <FollowButton profile={profile} />
     </Card>

@@ -22,7 +22,7 @@ export default observer(function ActivityDetailedSidebar({
         inverted
         color="teal"
       >
-        {attendees.length} {attendees.length === 1 ? "Person" : "People"} going
+        {attendees.length} {attendees.length === 1 ? "Persona" : "Personas"} asistiendo
       </Segment>
       <Segment attached>
         <List relaxed divided>
@@ -34,7 +34,7 @@ export default observer(function ActivityDetailedSidebar({
                   color="orange"
                   ribbon="right"
                 >
-                  Host
+                  Organizador
                 </Label>
               )}
               <Image size="tiny" src={attendee.image || "/assets/user.png"} />
@@ -45,7 +45,7 @@ export default observer(function ActivityDetailedSidebar({
                   </Link>
                 </Item.Header>
                 {attendee.following && (
-                  <Item.Extra style={{ color: "orange" }}>Following</Item.Extra>
+                  <Item.Extra style={{ color: "orange" }}>Siguiendo</Item.Extra>
                 )}
               </Item.Content>
             </Item>

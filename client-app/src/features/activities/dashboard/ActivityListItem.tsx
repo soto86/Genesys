@@ -17,7 +17,7 @@ export default function ActivityListItem({ activity }: Props) {
           <Label
             attached="top"
             color="red"
-            content="Cancelled"
+            content="Cancelada"
             style={{ textAlign: "center" }}
           />
         )}
@@ -34,7 +34,7 @@ export default function ActivityListItem({ activity }: Props) {
                 {activity.title}
               </Item.Header>
               <Item.Description>
-                Hosted by{" "}
+                Organizada por {" "}
                 <Link to={`/profiles/${activity.hostUsername}`}>
                   {activity.host?.displayName}
                 </Link>
@@ -42,14 +42,14 @@ export default function ActivityListItem({ activity }: Props) {
               {activity.isHost && (
                 <Item.Description>
                   <Label basic color="orange">
-                    You are hosting this activity
+                    Estas organizando esta Actividad
                   </Label>
                 </Item.Description>
               )}
               {activity.isGoing && !activity.isHost && (
                 <Item.Description>
                   <Label basic color="green">
-                    You are going to this activity
+                    Vas a asistir a esta Actividad
                   </Label>
                 </Item.Description>
               )}
@@ -73,7 +73,7 @@ export default function ActivityListItem({ activity }: Props) {
           to={`/activities/${activity.id}`}
           color="teal"
           floated="right"
-          content="View"
+          content="Ver"
         />
       </Segment>
     </Segment.Group>

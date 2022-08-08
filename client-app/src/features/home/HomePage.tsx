@@ -18,13 +18,13 @@ export default observer(function HomePage() {
             alt="logo"
             style={{ marginBottom: 12 }}
           />
-          Reactivities
+          Genesys
         </Header>
         {userStore.isLoggedIn ? (
           <>
-            <Header as="h2" inverted content="Welcome to Reactivities" />
+            <Header as="h2" inverted content="Bienvenido a Genesys" />
             <Button as={Link} to="/activities" size="huge" inverted>
-              Go to Activities!
+              Ver Actividades!
             </Button>
           </>
         ) : (
@@ -34,14 +34,14 @@ export default observer(function HomePage() {
               size="huge"
               inverted
             >
-              Login!
+              Ingresar!
             </Button>
             <Button
               onClick={() => modalStore.openModal(<RegisterForm />)}
               size="huge"
               inverted
             >
-              Register!
+              Restistrar!
             </Button>
           </>
         )}

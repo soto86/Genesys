@@ -32,7 +32,7 @@ export default observer(function ActivityDetailedChat({ activityId }: Props) {
         color="teal"
         style={{ border: "none" }}
       >
-        <Header>Chat about this event</Header>
+        <Header>Chatear sobre este evento</Header>
       </Segment>
       <Segment attached clearing>
         <Formik
@@ -51,7 +51,7 @@ export default observer(function ActivityDetailedChat({ activityId }: Props) {
                   <div style={{ position: "relative" }}>
                     <Loader active={isSubmitting} />
                     <textarea
-                      placeholder="Enter your comment (Enter to submit, SHIFT + enter for new line)"
+                      placeholder="Ingrese su comentario(Enter para enviar, SHIFT + enter para ingresar nueva linea)"
                       rows={2}
                       {...props.field}
                       onKeyPress={(e) => {

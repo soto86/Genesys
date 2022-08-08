@@ -35,7 +35,7 @@ export default observer(function ActivityDetailedHeader({ activity }: Props) {
             style={{ position: "absolute", zIndex: 1000, left: -14, top: 20 }}
             ribbon
             color="red"
-            content="Cancelled"
+            content="Cancelada"
           />
         )}
         <Image
@@ -54,7 +54,7 @@ export default observer(function ActivityDetailedHeader({ activity }: Props) {
                 />
                 <p>{format(activity.date!, "dd MMM yyyy")}</p>
                 <p>
-                  Hosted by{" "}
+                  Organizado por{" "}
                   <strong>
                     <Link to={`/profiles/${activity.host?.username}`}>
                       {activity.host?.displayName}
@@ -75,8 +75,8 @@ export default observer(function ActivityDetailedHeader({ activity }: Props) {
               basic
               content={
                 activity.isCancelled
-                  ? "Re-activate Activity"
-                  : "Cancel Activity"
+                  ? "Habilitar actividad"
+                  : "Cancelar actividad"
               }
               onClick={cancelActivityToggle}
               loading={loading}
@@ -88,12 +88,12 @@ export default observer(function ActivityDetailedHeader({ activity }: Props) {
               color="orange"
               floated="right"
             >
-              Manage Event
+              Editar evento
             </Button>
           </>
         ) : activity.isGoing ? (
           <Button loading={loading} onClick={updateAttendance}>
-            Cancel attendance
+            Cancelar asistencia
           </Button>
         ) : (
           <Button
@@ -102,7 +102,7 @@ export default observer(function ActivityDetailedHeader({ activity }: Props) {
             onClick={updateAttendance}
             color="teal"
           >
-            Join Activity
+            Asistir
           </Button>
         )}
       </Segment>

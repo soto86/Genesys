@@ -27,12 +27,12 @@ export default function PhotoUploadWidget({ loading, uploadPhoto }: Props) {
   return (
     <Grid>
       <Grid.Column width={4}>
-        <Header sub color="teal" content="Step 1 - Add Photo" />
+        <Header sub color="teal" content="Paso 1 - agregar foto" />
         <PhotoWidgetDropzone setFiles={setFiles} />
       </Grid.Column>
       <Grid.Column width={1} />
       <Grid.Column width={4}>
-        <Header sub color="teal" content="Step 2 - Resize image" />
+        <Header sub color="teal" content="Paso 2 - recortar Foto" />
         {files && files.length > 0 && (
           <PhotoWidgetCropper
             setCropper={setCropper}
@@ -42,7 +42,7 @@ export default function PhotoUploadWidget({ loading, uploadPhoto }: Props) {
       </Grid.Column>
       <Grid.Column width={1} />
       <Grid.Column width={4}>
-        <Header sub color="teal" content="Step 3 - Preview & Upload" />
+        <Header sub color="teal" content="paso 3 - previsualizar y subir" />
         {files && files.length > 0 && (
           <>
             <div

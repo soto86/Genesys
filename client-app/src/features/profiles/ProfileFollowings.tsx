@@ -17,8 +17,8 @@ export default observer(function ProfileFollowings() {
             icon="user"
             content={
               activeTab === 3
-                ? `People following ${profile!.displayName}`
-                : `People ${profile?.displayName} is following`
+                ? `Personas siguiendo a ${profile!.displayName}`
+                : `Personas que ${profile?.displayName} sigue`
             }
           />
         </Grid.Column>

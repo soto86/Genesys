@@ -16,13 +16,13 @@ export default observer(function ProfileAbout() {
           <Header
             floated="left"
             icon="user"
-            content={`About ${profile?.displayName}`}
+            content={`Sobre ${profile?.displayName}`}
           />
           {isCurrentUser && (
             <Button
               floated="right"
               basic
-              content={editMode ? "Cancel" : "Edit Profile"}
+              content={editMode ? "Cancelar" : "Editar Perfil"}
               onClick={() => setEditMode(!editMode)}
             />
           )}

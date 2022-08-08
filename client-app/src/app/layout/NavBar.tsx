@@ -17,16 +17,16 @@ export default observer(function NavBar() {
             alt="logo"
             style={{ marginRight: "10px" }}
           />
-          Reactivities
+          Genesys
         </Menu.Item>
-        <Menu.Item as={NavLink} to="/activities" name="Activities" />
-        <Menu.Item as={NavLink} to="/errors" name="Errors" />
+        <Menu.Item as={NavLink} to="/activities" name="Activities" content='Actividades'/>
+        {/* <Menu.Item as={NavLink} to="/errors" name="Errors" /> */}
         <Menu.Item>
           <Button
             as={NavLink}
             to="/createActivity"
             positive
-            content="Create Activity"
+            content="Crear Actividad"
           />
         </Menu.Item>
         <Menu.Item position="right">
@@ -40,10 +40,10 @@ export default observer(function NavBar() {
               <Dropdown.Item
                 as={Link}
                 to={`/profiles/${user?.username}`}
-                text="My Profile"
+                text="Mi Perfil"
                 icon="user"
               />
-              <Dropdown.Item onClick={logout} text="Logout" icon="power" />
+              <Dropdown.Item onClick={logout} text="Cerrar Sesión" icon="power" />
             </Dropdown.Menu>
           </Dropdown>
         </Menu.Item>

@@ -26,12 +26,12 @@ export default observer(function ActivityForm() {
   );
 
   const validationSchema = Yup.object({
-    title: Yup.string().required("The activity title is required"),
-    description: Yup.string().required("The activity description is required"),
-    category: Yup.string().required(),
-    date: Yup.string().required("Date is required").nullable(),
-    venue: Yup.string().required(),
-    city: Yup.string().required(),
+    title: Yup.string().required("El titulo de la actividad es obligatorio"),
+    description: Yup.string().required("La descripción es obligartoria"),
+    category: Yup.string().required("La categoría es obligatoria"),
+    date: Yup.string().required("La fecha es obligatoria").nullable(),
+    venue: Yup.string().required("El lugar es obligatorio"),
+    city: Yup.string().required("La ciudad es obligaotoria"),
   });
 
   useEffect(() => {
@@ -57,11 +57,11 @@ export default observer(function ActivityForm() {
     }
   }
 
-  if (loadingInitial) return <LoadingComponent content="Loading activity..." />;
+  if (loadingInitial) return <LoadingComponent content="Cargando Actividad..." />;
 
   return (
     <Segment clearing>
-      <Header content="Activity Details" sub color="teal" />
+      <Header content="Detalles de Actividad" sub color="teal" />
       <Formik
         validationSchema={validationSchema}
         enableReinitialize
@@ -70,37 +70,37 @@ export default observer(function ActivityForm() {
       >
         {({ handleSubmit, isValid, isSubmitting, dirty }) => (
           <Form className="ui form" onSubmit={handleSubmit} autoComplete="off">
-            <MyTextInput name="title" placeholder="Title" />
-            <MyTextArea rows={3} placeholder="Description" name="description" />
+            <MyTextInput name="title" placeholder="Título" />
+            <MyTextArea rows={3} placeholder="Descripción" name="description" />
             <MySelectInput
               options={categoryOptions}
-              placeholder="Category"
+              placeholder="Categoría"
               name="category"
             />
             <MyDateInput
-              placeholderText="Date"
+              placeholderText="Fecha"
               name="date"
               showTimeSelect
               timeCaption="time"
               dateFormat="MMMM d, yyyy h:mm aa"
             />
-            <Header content="Location Details" sub color="teal" />
-            <MyTextInput placeholder="City" name="city" />
-            <MyTextInput placeholder="Venue" name="venue" />
+            <Header content="Detalles de Ubicación" sub color="teal" />
+            <MyTextInput placeholder="Ciudad" name="city" />
+            <MyTextInput placeholder="Lugar" name="venue" />
             <Button
               disabled={isSubmitting || !dirty || !isValid}
               loading={isSubmitting}
               floated="right"
               positive
               type="submit"
-              content="Submit"
+              content="Guardar"
             />
             <Button
               as={Link}
               to="/activities"
               floated="right"
               type="button"
-              content="Cancel"
+              content="Cancelar"
             />
           </Form>
         )}
